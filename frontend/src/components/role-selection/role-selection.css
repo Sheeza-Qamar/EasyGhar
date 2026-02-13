@@ -1,0 +1,220 @@
+/* Role Selection Page */
+.role-selection-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 25%, #f0f9ff 50%, #ecfdf5 75%, #f0fdf4 100%);
+}
+
+.role-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 40px 32px;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.role-card:hover::before {
+  opacity: 1;
+}
+
+.role-card:hover {
+  border-color: #0ea5e9;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+}
+
+.role-card.active {
+  border-color: #0ea5e9;
+  background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+  box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+}
+
+.role-card-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  transition: transform 0.4s ease;
+}
+
+.role-card:hover .role-card-icon {
+  transform: scale(1.15);
+}
+
+.role-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.role-card-description {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.role-features {
+  list-style: none;
+  margin: 0 0 28px 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.role-features li {
+  font-size: 13px;
+  color: #475569;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-features li::before {
+  content: '✓';
+  color: #10b981;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.role-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.role-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+}
+
+.role-button:active {
+  transform: translateY(0);
+}
+
+.role-card.active .role-button {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+}
+
+.role-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.role-badge-provider {
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+}
+
+.role-button-provider {
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%) !important;
+}
+
+.role-button-provider:hover {
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+}
+
+.role-selection-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.role-selection-toast.show {
+  opacity: 1;
+}
+
+.role-selection-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.role-selection-toast.success .role-selection-toast-content {
+  color: #10b981;
+  border-left: 4px solid #10b981;
+}
+
+.role-selection-back-btn {
+  padding: 8px 12px;
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #475569;
+  text-decoration: none;
+}
+
+.role-selection-back-btn:hover {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+@media (max-width: 768px) {
+  .role-card {
+    padding: 32px 24px;
+  }
+
+  .role-card-icon {
+    font-size: 48px;
+  }
+
+  .role-card-title {
+    font-size: 20px;
+  }
+}
