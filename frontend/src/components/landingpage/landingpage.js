@@ -331,20 +331,20 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white scroll-trigger">
             <div className="stat-item scroll-trigger stagger-1">
-              <div className="stat-number">50K+</div>
-              <p className="text-cyan-100 font-medium">Happy Customers</p>
+              <div className="stat-number">50,000+</div>
+              <p className="stat-label text-sm">Happy Customers</p>
             </div>
             <div className="stat-item scroll-trigger stagger-2">
-              <div className="stat-number">2K+</div>
-              <p className="text-cyan-100 font-medium">Verified Workers</p>
+              <div className="stat-number">2,500+</div>
+              <p className="stat-label text-sm">Verified Workers</p>
             </div>
             <div className="stat-item scroll-trigger stagger-3">
-              <div className="stat-number">100K+</div>
-              <p className="text-cyan-100 font-medium">Jobs Completed</p>
+              <div className="stat-number">1,20,000+</div>
+              <p className="stat-label text-sm">Jobs Completed</p>
             </div>
             <div className="stat-item scroll-trigger stagger-4">
-              <div className="stat-number">4.9★</div>
-              <p className="text-cyan-100 font-medium">Average Rating</p>
+              <div className="stat-number">4.9 ★</div>
+              <p className="stat-label text-sm">Average Rating</p>
             </div>
           </div>
         </div>

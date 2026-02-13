@@ -328,20 +328,63 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, div {
 /* Stats Counter */
 .stat-item {
   text-align: center;
-  padding: 20px 16px;
+  padding: 24px 16px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .stat-number {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transform: translateZ(0);
+  margin-bottom: 6px;
+  opacity: 0;
+  transform: scale(0.88) translateY(12px);
+}
+.stat-item.scroll-trigger.visible .stat-number {
+  animation: statPop 0.6s ease-out forwards;
+}
+.stat-item.stagger-1.visible .stat-number { animation-delay: 0.1s; }
+.stat-item.stagger-2.visible .stat-number { animation-delay: 0.2s; }
+.stat-item.stagger-3.visible .stat-number { animation-delay: 0.3s; }
+.stat-item.stagger-4.visible .stat-number { animation-delay: 0.4s; }
+
+@keyframes statPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.stat-item .stat-label {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.stat-item:hover .stat-label {
+  color: #ffffff;
 }
 
 /* Testimonial */
