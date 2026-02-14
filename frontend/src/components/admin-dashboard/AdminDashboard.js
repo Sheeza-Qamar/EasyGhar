@@ -204,18 +204,21 @@ function AdminDashboard() {
         </div>
       </aside>
 
-      <main className="admin-main">
-        <div className="admin-top-bar">
-          <div className="admin-search-box">
-            <span className="admin-search-icon">🔍</span>
-            <input type="text" placeholder="Search workers, applications..." />
-          </div>
-          <div className="admin-top-actions">
-            <button type="button" className="admin-logout-top-btn" onClick={() => setModal('logout')}>
-              Logout
-            </button>
-            <div className="admin-profile-avatar">AD</div>
-          </div>
+      <main className={`admin-main ${activeTab === 'worker-requests' ? 'admin-main-worker-requests' : ''}`}>
+        <div className="admin-top-bar" style={activeTab === 'worker-requests' ? { marginTop: 14 } : undefined}>
+          {activeTab === 'worker-requests' ? (
+            <>
+              <div className="admin-top-bar-spacer" />
+              <h2 className="admin-top-bar-title">Worker Registration Requests</h2>
+              <div className="admin-top-bar-actions-right">
+                <div className="admin-profile-avatar">AD</div>
+              </div>
+            </>
+          ) : (
+            <div className="admin-top-actions" style={{ marginLeft: 'auto' }}>
+              <div className="admin-profile-avatar">AD</div>
+            </div>
+          )}
         </div>
 
         {activeTab === 'dashboard' && (
@@ -230,10 +233,15 @@ function AdminDashboard() {
         )}
 
         {activeTab === 'worker-requests' && (
-          <div>
-            <h2 className="admin-header-title">Worker Registration Requests</h2>
-            <p className="admin-header-subtitle">Review and approve pending service provider applications</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 24 }}>
+          <div className="admin-worker-requests-page">
+            <header className="admin-worker-requests-header">
+              <p className="admin-header-subtitle">Review and approve pending service provider applications</p>
+            </header>
+            <div className="admin-search-box admin-worker-requests-search" style={{ marginBottom: 24 }}>
+              <span className="admin-search-icon">🔍</span>
+              <input type="text" placeholder="Search workers, applications..." />
+            </div>
+            <div className="admin-worker-requests-filters" style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 24 }}>
               {['all', 'pending', 'approved', 'rejected'].map((status) => (
                 <button
                   key={status}

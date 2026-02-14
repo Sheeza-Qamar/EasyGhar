@@ -409,6 +409,35 @@ const ProviderDashboard = () => {
             {profileError && <div className="pd-profile-error">{profileError}</div>}
             {profileLoading ? (
               <div style={{ padding: 40, textAlign: 'center', color: '#64748b' }}>Loading profile...</div>
+            ) : !profile && !profileLoading ? (
+              <div className="pd-verification-card" style={{ borderLeftColor: '#94a3b8' }}>
+                <p className="pd-verification-text">Unable to load profile. Please try again or sign in again.</p>
+              </div>
+            ) : profile && profile.verification_status === 'pending' ? (
+              <div className="pd-verification-card pd-verification-pending">
+                <div className="pd-verification-icon">⏳</div>
+                <h3 className="pd-verification-title">Your verification is in progress</h3>
+                <p className="pd-verification-text">
+                  Once our team completes the review, you will be able to edit your profile and manage your services here.
+                  We will notify you when your account is approved.
+                </p>
+              </div>
+            ) : profile && profile.verification_status === 'rejected' ? (
+              <div className="pd-verification-card pd-verification-rejected">
+                <div className="pd-verification-icon">✕</div>
+                <h3 className="pd-verification-title">Verification not approved</h3>
+                <p className="pd-verification-text">
+                  Your application could not be approved at this time.
+                  {profile.verification_notes ? (
+                    <>
+                      {' '}The admin left the following note:
+                      <blockquote className="pd-verification-notes">{profile.verification_notes}</blockquote>
+                    </>
+                  ) : (
+                    ' You may contact support if you have questions.'
+                  )}
+                </p>
+              </div>
             ) : (
               <>
                 <div className="pd-profile-card">

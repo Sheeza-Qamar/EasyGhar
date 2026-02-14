@@ -25,7 +25,7 @@ router.get('/profile', async (req, res) => {
     }
     const worker = await db.queryOne(
       `SELECT w.id, w.user_id, w.city_id, w.default_address, w.experience_years, w.bio,
-              w.profile_photo_url, w.profile_photo_public_id, w.verification_status, w.created_at,
+              w.profile_photo_url, w.profile_photo_public_id, w.verification_status, w.verification_notes, w.created_at,
               u.full_name, u.phone, u.email,
               c.city_name
        FROM workers w
@@ -58,6 +58,7 @@ router.get('/profile', async (req, res) => {
         profile_photo_url: worker.profile_photo_url,
         experience_years: worker.experience_years,
         verification_status: worker.verification_status,
+        verification_notes: worker.verification_notes || null,
       },
       services: services.map((s) => ({
         id: s.id,
@@ -74,12 +75,21 @@ router.get('/profile', async (req, res) => {
   }
 });
 
-// PATCH /api/worker/profile — update profile (optional multipart for profile photo)
+// PATCH /api/worker/profile — update profile (optional multipart for profile photo); only when verified
 router.patch('/profile', upload.single('profilePicture'), async (req, res) => {
   try {
     const workerId = await getWorkerId(req.userId);
     if (!workerId) {
       return res.status(404).json({ success: false, message: 'Worker profile not found.' });
+    }
+    const statusRow = await db.queryOne('SELECT verification_status FROM workers WHERE id = ?', [workerId]);
+    if (statusRow && statusRow.verification_status !== 'approved') {
+      return res.status(403).json({
+        success: false,
+        message: statusRow.verification_status === 'pending'
+          ? 'Your profile can be edited only after admin approves your verification.'
+          : 'Your account was not approved. Profile editing is not available.',
+      });
     }
     const body = req.body || {};
     const fullName = (body.full_name || body.fullName || '').trim();
@@ -162,6 +172,15 @@ router.put('/services', async (req, res) => {
     const workerId = await getWorkerId(req.userId);
     if (!workerId) {
       return res.status(404).json({ success: false, message: 'Worker profile not found.' });
+    }
+    const statusRow = await db.queryOne('SELECT verification_status FROM workers WHERE id = ?', [workerId]);
+    if (statusRow && statusRow.verification_status !== 'approved') {
+      return res.status(403).json({
+        success: false,
+        message: statusRow.verification_status === 'pending'
+          ? 'Services can be updated only after admin approves your verification.'
+          : 'Your account was not approved. Service updates are not available.',
+      });
     }
     const list = Array.isArray(req.body.services) ? req.body.services : [];
     const pool = db.getPool();
