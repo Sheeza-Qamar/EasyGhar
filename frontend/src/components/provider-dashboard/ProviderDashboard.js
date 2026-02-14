@@ -293,10 +293,14 @@ const ProviderDashboard = () => {
 
       <main className="pd-main-content">
         <div className="pd-top-bar">
-          <div className="pd-search-box">
-            <span className="pd-search-icon">🔍</span>
-            <input type="text" placeholder="Search bookings, customers..." />
-          </div>
+          {activeTab === 'dashboard' ? (
+            <div className="pd-welcome-block">
+              <h2 className="pd-header-title pd-stagger-1">Welcome back, {firstName}</h2>
+              <p className="pd-header-subtitle pd-stagger-1">Here&apos;s your business overview for today</p>
+            </div>
+          ) : (
+            <div className="pd-top-bar-spacer" />
+          )}
           <div className="pd-top-actions">
             <button type="button" className="pd-icon-btn" aria-label="Notifications">
               🔔
@@ -313,11 +317,6 @@ const ProviderDashboard = () => {
 
         {activeTab === 'dashboard' && (
           <>
-            <div style={{ marginBottom: 28 }}>
-              <h2 className="pd-header-title pd-stagger-1">Welcome back, {firstName}</h2>
-              <p className="pd-header-subtitle pd-stagger-1">Here&apos;s your business overview for today</p>
-            </div>
-
             <div className="pd-stats-grid">
               <div className="pd-stat-card pd-stagger-2">
                 <div className="pd-stat-header">
