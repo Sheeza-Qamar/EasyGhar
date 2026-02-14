@@ -37,28 +37,28 @@ const LandingPage = () => {
       <div className="h-[70px] shrink-0" aria-hidden="true" />
 
       {/* Hero Section */}
-      <section className="hero-container gradient-mesh pt-6 lg:pt-8 pb-10 md:pb-14">
+      <section className="hero-container gradient-mesh pt-12 lg:pt-16 pb-16 md:pb-24">
         <div className="absolute top-20 left-10 w-64 h-64 bg-blue-400 hero-bg-element"></div>
         <div className="absolute bottom-0 right-0 w-56 h-56 bg-cyan-400 hero-bg-element"></div>
         <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-green-300 hero-bg-element"></div>
         <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 lg:px-12 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center min-h-0 py-4">
+          <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-center min-h-0 py-8 lg:py-12">
             {/* Left Content */}
             <div>
-              <div className="mb-4 stagger-1">
+              <div className="mb-6 stagger-1">
                 <span className="badge badge-blue">
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg> Trusted by 50,000+ households
                 </span>
               </div>
-              <h1 id="hero-title" className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-4 stagger-2">
+              <h1 id="hero-title" className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-6 stagger-2">
                 Professional Home Services at Your <span className="gradient-text">Doorstep</span>
               </h1>
-              <p id="hero-subtitle" className="text-sm md:text-base text-slate-600 mb-6 leading-snug stagger-3 max-w-xl">
+              <p id="hero-subtitle" className="text-sm md:text-base text-slate-600 mb-8 leading-relaxed stagger-3 max-w-xl">
                 Connect with verified, background-checked professionals. Transparent pricing, real-time tracking, and guaranteed satisfaction for all your household needs.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 stagger-4">
+              <div className="flex flex-col sm:flex-row gap-4 stagger-4">
                 <Link to="/get-started" className="btn btn-primary">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -71,7 +71,7 @@ const LandingPage = () => {
                 </a>
               </div>
               {/* Trust Badges */}
-              <div className="mt-8 flex items-center gap-6 stagger-5">
+              <div className="mt-10 lg:mt-12 flex items-center gap-6 stagger-5">
                 <div className="flex -space-x-2">
                   <div className="avatar text-xs" style={{ zIndex: 4 }}>
                     A
@@ -99,8 +99,8 @@ const LandingPage = () => {
             <div className="relative hidden lg:block lg:flex lg:justify-end">
               <div className="relative w-full max-w-md xl:max-w-lg">
                 {/* Animated Card */}
-                <div className="glass p-5 lg:p-6 rounded-xl shadow-xl animate-slide-up" style={{ animationDelay: '0.3s' }}>
-                  <div className="space-y-3">
+                <div className="glass p-6 lg:p-8 rounded-xl shadow-xl animate-slide-up" style={{ animationDelay: '0.3s' }}>
+                  <div className="space-y-4">
                     {/* Card 1 */}
                     <div className="glass-dark p-3 rounded-lg stagger-1">
                       <div className="flex items-center justify-between mb-2">
