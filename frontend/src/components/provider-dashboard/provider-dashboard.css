@@ -468,6 +468,94 @@
 .pd-modal-text { font-size: 14px; color: #64748b; margin-bottom: 24px; line-height: 1.6; }
 .pd-modal-actions { display: flex; gap: 12px; }
 
+/* Profile section */
+.pd-profile-section { max-width: 720px; }
+.pd-profile-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+.pd-profile-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+.pd-profile-card-title { font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0; }
+.pd-profile-card-sub { font-size: 13px; color: #64748b; margin: 0 0 20px 0; }
+.pd-profile-photo-row { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+.pd-profile-photo-wrap { flex-shrink: 0; }
+.pd-profile-photo, .pd-profile-photo-placeholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.pd-profile-photo-placeholder {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+.pd-profile-file { font-size: 13px; color: #64748b; margin-top: 4px; }
+.pd-profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  margin-bottom: 20px;
+}
+.pd-profile-grid .pd-profile-bio { grid-column: 1 / -1; }
+.pd-profile-label { font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px; }
+.pd-profile-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+}
+.pd-profile-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+.pd-profile-bio { resize: vertical; min-height: 80px; }
+.pd-services-table { margin-bottom: 16px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+.pd-services-table-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 80px;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;
+}
+.pd-services-table-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 80px;
+  gap: 12px;
+  padding: 12px 16px;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+.pd-services-name { font-weight: 600; color: #0f172a; }
+.pd-services-input { width: 100%; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; }
+.pd-profile-remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.pd-profile-remove-btn:hover { text-decoration: underline; }
+.pd-profile-add-service { margin-bottom: 16px; }
+.pd-profile-add-service .pd-profile-input { max-width: 280px; }
+
 @media (max-width: 1024px) {
   .pd-sidebar { width: 240px; }
   .pd-main-content { margin-left: 240px; padding: 24px; }

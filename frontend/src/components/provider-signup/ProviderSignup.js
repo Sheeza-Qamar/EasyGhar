@@ -25,70 +25,26 @@ const ProviderSignup = () => {
   const [errors, setErrors] = useState({});
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [profilePreview, setProfilePreview] = useState(null);
+  const [cities, setCities] = useState([]);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [services, setServices] = useState([]);
 
-  const services = [
-    { id: 'plumbing', name: 'Plumbing', nameUrdu: 'پلمبنگ', icon: '🔧' },
-    { id: 'electrical', name: 'Electrical', nameUrdu: 'بجلی', icon: '⚡' },
-    { id: 'cleaning', name: 'Cleaning', nameUrdu: 'صفائی', icon: '✨' },
-    { id: 'ac-service', name: 'AC Service', nameUrdu: 'اے سی سروس', icon: '❄️' },
-    { id: 'painting', name: 'Painting', nameUrdu: 'پینٹنگ', icon: '🎨' },
-    { id: 'carpentry', name: 'Carpentry', nameUrdu: 'بڑھئی', icon: '🪚' },
-    { id: 'appliance-repair', name: 'Appliance Repair', nameUrdu: 'آلات کی مرمت', icon: '🔌' },
-    { id: 'roofing', name: 'Roofing', nameUrdu: 'چھت', icon: '🏠' },
-    { id: 'flooring', name: 'Flooring', nameUrdu: 'فرش', icon: '🪵' },
-    { id: 'tiling', name: 'Tiling', nameUrdu: 'ٹائیلنگ', icon: '🧱' },
-    { id: 'masonry', name: 'Masonry', nameUrdu: 'راج', icon: '🧱' },
-    { id: 'welding', name: 'Welding', nameUrdu: 'ویلڈنگ', icon: '⚒️' },
-    { id: 'locksmith', name: 'Locksmith', nameUrdu: 'تالا ساز', icon: '🔐' },
-    { id: 'glass-repair', name: 'Glass Repair', nameUrdu: 'شیشے کی مرمت', icon: '🪟' },
-    { id: 'upholstery', name: 'Upholstery', nameUrdu: 'گدی سازی', icon: '🛋️' },
-    { id: 'gardening', name: 'Gardening', nameUrdu: 'باغبانی', icon: '🌳' },
-    { id: 'landscaping', name: 'Landscaping', nameUrdu: 'زمین کی تزئین', icon: '🌿' },
-    { id: 'pest-control', name: 'Pest Control', nameUrdu: 'کیڑے مار', icon: '🐛' },
-    { id: 'waterproofing', name: 'Waterproofing', nameUrdu: 'واٹر پروفنگ', icon: '💧' },
-    { id: 'furniture-assembly', name: 'Furniture Assembly', nameUrdu: 'فرنیچر اسمبلی', icon: '🪑' },
-    { id: 'tv-mounting', name: 'TV Mounting', nameUrdu: 'ٹی وی ماؤنٹنگ', icon: '📺' },
-    { id: 'curtain-installation', name: 'Curtain Installation', nameUrdu: 'پردے لگانا', icon: '🪟' },
-    { id: 'blinds-installation', name: 'Blinds Installation', nameUrdu: 'بلائنڈز لگانا', icon: '🪟' },
-    { id: 'wallpaper-installation', name: 'Wallpaper Installation', nameUrdu: 'وال پیپر لگانا', icon: '🖼️' },
-    { id: 'door-installation', name: 'Door Installation', nameUrdu: 'دروازہ لگانا', icon: '🚪' },
-    { id: 'window-installation', name: 'Window Installation', nameUrdu: 'کھڑکی لگانا', icon: '🪟' },
-    { id: 'fence-installation', name: 'Fence Installation', nameUrdu: 'باڑ لگانا', icon: '🚧' },
-    { id: 'gate-installation', name: 'Gate Installation', nameUrdu: 'گیٹ لگانا', icon: '🚪' },
-    { id: 'cctv-installation', name: 'CCTV Installation', nameUrdu: 'سی سی ٹی وی لگانا', icon: '📹' },
-    { id: 'security-system', name: 'Security System', nameUrdu: 'سیکیورٹی سسٹم', icon: '🔒' },
-    { id: 'intercom-installation', name: 'Intercom Installation', nameUrdu: 'انٹرکام لگانا', icon: '📞' },
-    { id: 'water-tank-cleaning', name: 'Water Tank Cleaning', nameUrdu: 'پانی کے ٹینک کی صفائی', icon: '💧' },
-    { id: 'septic-tank-cleaning', name: 'Septic Tank Cleaning', nameUrdu: 'سیپٹک ٹینک کی صفائی', icon: '🚽' },
-    { id: 'drain-cleaning', name: 'Drain Cleaning', nameUrdu: 'نالی کی صفائی', icon: '🚿' },
-    { id: 'chimney-cleaning', name: 'Chimney Cleaning', nameUrdu: 'چمنی کی صفائی', icon: '🔥' },
-    { id: 'carpet-cleaning', name: 'Carpet Cleaning', nameUrdu: 'قالین کی صفائی', icon: '🧹' },
-    { id: 'sofa-cleaning', name: 'Sofa Cleaning', nameUrdu: 'صوفے کی صفائی', icon: '🛋️' },
-    { id: 'mattress-cleaning', name: 'Mattress Cleaning', nameUrdu: 'گدے کی صفائی', icon: '🛏️' },
-    { id: 'car-washing', name: 'Car Washing', nameUrdu: 'گاڑی دھونا', icon: '🚗' },
-    { id: 'bike-washing', name: 'Bike Washing', nameUrdu: 'موٹر سائیکل دھونا', icon: '🏍️' },
-    { id: 'bathroom-renovation', name: 'Bathroom Renovation', nameUrdu: 'باتھ روم کی تجدید', icon: '🚿' },
-    { id: 'kitchen-renovation', name: 'Kitchen Renovation', nameUrdu: 'باورچی خانے کی تجدید', icon: '🍳' },
-    { id: 'false-ceiling', name: 'False Ceiling', nameUrdu: 'جھوٹی چھت', icon: '🏛️' },
-    { id: 'pop-work', name: 'POP Work', nameUrdu: 'پوپ کا کام', icon: '🏗️' },
-    { id: 'marble-polishing', name: 'Marble Polishing', nameUrdu: 'سنگ مرمر پالش', icon: '💎' },
-    { id: 'wood-polishing', name: 'Wood Polishing', nameUrdu: 'لکڑی پالش', icon: '🪵' },
-    { id: 'floor-polishing', name: 'Floor Polishing', nameUrdu: 'فرش پالش', icon: '✨' },
-    { id: 'car-painting', name: 'Car Painting', nameUrdu: 'گاڑی پینٹنگ', icon: '🚗' },
-    { id: 'bike-painting', name: 'Bike Painting', nameUrdu: 'موٹر سائیکل پینٹنگ', icon: '🏍️' },
-    { id: 'generator-service', name: 'Generator Service', nameUrdu: 'جنریٹر سروس', icon: '⚡' },
-    { id: 'inverter-service', name: 'Inverter Service', nameUrdu: 'انورٹر سروس', icon: '🔋' },
-    { id: 'solar-panel-installation', name: 'Solar Panel Installation', nameUrdu: 'سولر پینل لگانا', icon: '☀️' },
-    { id: 'water-pump-repair', name: 'Water Pump Repair', nameUrdu: 'پانی کے پمپ کی مرمت', icon: '💧' },
-    { id: 'motor-winding', name: 'Motor Winding', nameUrdu: 'موٹر وائنڈنگ', icon: '⚙️' },
-    { id: 'bike-repair', name: 'Bike Repair', nameUrdu: 'موٹر سائیکل کی مرمت', icon: '🏍️' },
-    { id: 'car-repair', name: 'Car Repair', nameUrdu: 'گاڑی کی مرمت', icon: '🚗' },
-    { id: 'bicycle-repair', name: 'Bicycle Repair', nameUrdu: 'سائیکل کی مرمت', icon: '🚲' }
-  ];
+  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-  const cities = [
-    'Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Hyderabad'
-  ];
+  useEffect(() => {
+    fetch(`${API_BASE}/api/auth/cities`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.cities && Array.isArray(data.cities)) setCities(data.cities);
+      })
+      .catch(() => {});
+    fetch(`${API_BASE}/api/auth/services`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.services && Array.isArray(data.services)) setServices(data.services);
+      })
+      .catch(() => {});
+  }, []);
 
   const progress = (currentStep / 4) * 100;
 
@@ -492,18 +448,43 @@ const ProviderSignup = () => {
                   <div className="grid md:grid-cols-2 gap-8 mb-8">
                     <div className="form-group">
                       <label className="form-label required">City</label>
-                      <select
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className={`form-select ${errors.city ? 'error' : formData.city ? 'success' : ''}`}
-                        required
-                      >
-                        <option value="">Select Your City</option>
-                        {cities.map(city => (
-                          <option key={city.toLowerCase()} value={city.toLowerCase()}>{city}</option>
-                        ))}
-                      </select>
+                      <div className="custom-city-wrap">
+                        <button
+                          type="button"
+                          onClick={() => setCityDropdownOpen((o) => !o)}
+                          onBlur={() => setTimeout(() => setCityDropdownOpen(false), 180)}
+                          className={`form-select custom-city-trigger ${errors.city ? 'error' : formData.city ? 'success' : ''}`}
+                          aria-expanded={cityDropdownOpen}
+                          aria-haspopup="listbox"
+                        >
+                          <span>
+                            {formData.city
+                              ? (cities.find((c) => (c.city_name || '').trim().toLowerCase() === formData.city)?.city_name || formData.city)
+                              : 'Select Your City'}
+                          </span>
+                          <span className="custom-city-chevron">{cityDropdownOpen ? '▲' : '▼'}</span>
+                        </button>
+                        {cityDropdownOpen && (
+                          <ul className="custom-city-list" role="listbox">
+                            {cities.map((city) => {
+                              const value = (city.city_name || '').trim().toLowerCase();
+                              const urdu = city.city_name_urdu || city.cityNameUrdu || '';
+                              return (
+                                <li
+                                  key={city.id}
+                                  role="option"
+                                  aria-selected={formData.city === value}
+                                  className="custom-city-option"
+                                  onMouseDown={(e) => { e.preventDefault(); handleInputChange({ target: { name: 'city', value } }); setCityDropdownOpen(false); }}
+                                >
+                                  <span className="custom-city-english">{city.city_name || ''}</span>
+                                  {urdu ? <span className="custom-city-urdu" dir="rtl">{urdu}</span> : null}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </div>
                       {errors.city && <div className="form-error">{errors.city}</div>}
                       <div className="form-hint">Primary location for services</div>
                     </div>

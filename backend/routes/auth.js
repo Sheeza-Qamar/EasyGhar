@@ -1,9 +1,49 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const { uploadBuffer } = require('../config/cloudinary');
 const multer = require('multer');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'easyghar-default-secret';
+const JWT_OPTIONS = { expiresIn: '30d' };
+
+// GET /api/auth/cities — list cities from DB (for signup/profile); no hardcoding
+router.get('/cities', async (req, res) => {
+  try {
+    const rows = await db.query('SELECT id, city_name, city_name_urdu FROM cities WHERE is_active = 1 ORDER BY city_name');
+    const cities = (rows || []).map((r) => ({
+      id: r.id,
+      city_name: r.city_name || '',
+      city_name_urdu: r.city_name_urdu || r.cityNameUrdu || '',
+    }));
+    res.json({ success: true, cities });
+  } catch (err) {
+    console.error('Cities list error:', err);
+    res.status(500).json({ success: false, message: 'Failed to load cities.' });
+  }
+});
+
+// GET /api/auth/services — list services from DB (for worker signup); no hardcoding
+router.get('/services', async (req, res) => {
+  try {
+    const rows = await db.query(
+      'SELECT id, service_key, english_name, urdu_name, icon FROM services WHERE is_active = 1 ORDER BY display_order ASC, english_name ASC'
+    );
+    const services = (rows || []).map((r) => ({
+      id: r.service_key,
+      service_key: r.service_key || '',
+      name: r.english_name || '',
+      nameUrdu: r.urdu_name || '',
+      icon: r.icon || '',
+    }));
+    res.json({ success: true, services });
+  } catch (err) {
+    console.error('Services list error:', err);
+    res.status(500).json({ success: false, message: 'Failed to load services.' });
+  }
+});
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -207,10 +247,12 @@ router.post('/login', async (req, res) => {
     await db.query('UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE id = ?', [user.id]);
 
     const { password_hash, is_active, ...safeUser } = user;
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, JWT_OPTIONS);
     res.json({
       success: true,
       message: 'Signed in successfully.',
       user: safeUser,
+      token,
     });
   } catch (err) {
     console.error('Login error:', err);

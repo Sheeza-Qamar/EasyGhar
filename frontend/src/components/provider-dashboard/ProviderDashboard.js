@@ -2,11 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './provider-dashboard.css';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [profileServices, setProfileServices] = useState([]);
+  const [servicesList, setServicesList] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState('');
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [servicesSaving, setServicesSaving] = useState(false);
+  const [profileForm, setProfileForm] = useState({ full_name: '', email: '', phone: '', city_id: '', default_address: '', bio: '' });
+  const [profilePhotoFile, setProfilePhotoFile] = useState(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
+
+  const getToken = () => localStorage.getItem('easyghar_token') || '';
 
   useEffect(() => {
     try {
@@ -26,10 +41,158 @@ const ProviderDashboard = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    if (activeTab !== 'profile' || !user) return;
+    const token = getToken();
+    if (!token) {
+      setProfileError('Please sign in again to edit profile.');
+      return;
+    }
+    setProfileLoading(true);
+    setProfileError('');
+    Promise.all([
+      fetch(`${API_BASE}/api/worker/profile`, { headers: { Authorization: `Bearer ${token}` } }),
+      fetch(`${API_BASE}/api/worker/services-list`, { headers: { Authorization: `Bearer ${token}` } }),
+      fetch(`${API_BASE}/api/auth/cities`),
+    ])
+      .then(async ([profileRes, servicesRes, citiesRes]) => {
+        const profileData = await profileRes.json().catch(() => ({}));
+        const servicesData = await servicesRes.json().catch(() => ({}));
+        const citiesData = await citiesRes.json().catch(() => ({}));
+        if (profileRes.ok && profileData.profile) {
+          setProfile(profileData.profile);
+          setProfileForm({
+            full_name: profileData.profile.full_name || '',
+            email: profileData.profile.email || '',
+            phone: profileData.profile.phone || '',
+            city_id: String(profileData.profile.city_id || ''),
+            default_address: profileData.profile.default_address || '',
+            bio: profileData.profile.bio || '',
+          });
+          setProfilePhotoPreview(profileData.profile.profile_photo_url || null);
+          setProfileServices(profileData.services || []);
+        } else {
+          setProfileError(profileData.message || 'Failed to load profile.');
+        }
+        if (servicesRes.ok && servicesData.services) setServicesList(servicesData.services);
+        if (citiesRes.ok && citiesData.cities) setCities(citiesData.cities);
+      })
+      .catch(() => setProfileError('Network error.'))
+      .finally(() => setProfileLoading(false));
+  }, [activeTab, user]);
+
   const handleLogout = () => {
     localStorage.removeItem('easyghar_user');
+    localStorage.removeItem('easyghar_token');
     setLogoutModalOpen(false);
     navigate('/');
+  };
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProfilePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfilePhotoFile(file);
+      setProfilePhotoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const saveProfile = async () => {
+    const token = getToken();
+    if (!token) return;
+    setProfileSaving(true);
+    try {
+      const form = new FormData();
+      form.append('full_name', profileForm.full_name);
+      form.append('email', profileForm.email);
+      form.append('phone', profileForm.phone);
+      form.append('city_id', profileForm.city_id || '');
+      form.append('default_address', profileForm.default_address);
+      form.append('bio', profileForm.bio);
+      if (profilePhotoFile) form.append('profilePicture', profilePhotoFile);
+      const res = await fetch(`${API_BASE}/api/worker/profile`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` },
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setProfileError(data.message || 'Failed to update profile.');
+        return;
+      }
+      setProfileError('');
+      setProfilePhotoFile(null);
+      if (user) {
+        const updated = { ...user, full_name: profileForm.full_name, email: profileForm.email, phone: profileForm.phone };
+        localStorage.setItem('easyghar_user', JSON.stringify(updated));
+        setUser(updated);
+      }
+    } catch {
+      setProfileError('Network error.');
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const updateServicePrice = (index, field, value) => {
+    setProfileServices((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
+  const removeService = (index) => {
+    setProfileServices((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addService = () => {
+    const first = servicesList.find((s) => !profileServices.some((ps) => ps.service_id === s.id));
+    if (first) {
+      setProfileServices((prev) => [...prev, { service_id: first.id, service_key: first.service_key, name: first.english_name, minimum_charges: 0, hourly_rate: 0 }]);
+    }
+  };
+
+  const addServiceById = (e) => {
+    const id = parseInt(e.target.value, 10);
+    if (!id) return;
+    const s = servicesList.find((x) => x.id === id);
+    if (s && !profileServices.some((ps) => ps.service_id === id)) {
+      setProfileServices((prev) => [...prev, { service_id: s.id, service_key: s.service_key, name: s.english_name, minimum_charges: 0, hourly_rate: 0 }]);
+    }
+    e.target.value = '';
+  };
+
+  const saveServices = async () => {
+    const token = getToken();
+    if (!token) return;
+    setServicesSaving(true);
+    try {
+      const payload = profileServices.map((s) => ({
+        service_id: s.service_id,
+        minimum_charges: parseFloat(s.minimum_charges) || 0,
+        hourly_rate: parseFloat(s.hourly_rate) || 0,
+      }));
+      const res = await fetch(`${API_BASE}/api/worker/services`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ services: payload }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setProfileError(data.message || 'Failed to update services.');
+        return;
+      }
+      setProfileError('');
+    } catch {
+      setProfileError('Network error.');
+    } finally {
+      setServicesSaving(false);
+    }
   };
 
   const firstName = user?.full_name?.trim().split(' ')[0] || user?.full_name || 'Partner';
@@ -239,7 +402,93 @@ const ProviderDashboard = () => {
           </>
         )}
 
-        {activeTab !== 'dashboard' && (
+        {activeTab === 'profile' && (
+          <div className="pd-profile-section">
+            <h2 className="pd-header-title">Profile</h2>
+            <p className="pd-header-subtitle">Update your information and services</p>
+            {profileError && <div className="pd-profile-error">{profileError}</div>}
+            {profileLoading ? (
+              <div style={{ padding: 40, textAlign: 'center', color: '#64748b' }}>Loading profile...</div>
+            ) : (
+              <>
+                <div className="pd-profile-card">
+                  <h3 className="pd-profile-card-title">Personal information</h3>
+                  <div className="pd-profile-photo-row">
+                    <div className="pd-profile-photo-wrap">
+                      {profilePhotoPreview ? (
+                        <img src={profilePhotoPreview} alt="Profile" className="pd-profile-photo" />
+                      ) : (
+                        <div className="pd-profile-photo-placeholder">{initials}</div>
+                      )}
+                    </div>
+                    <div>
+                      <label className="pd-profile-label">Profile photo</label>
+                      <input type="file" accept="image/*" onChange={handleProfilePhotoChange} className="pd-profile-file" />
+                    </div>
+                  </div>
+                  <div className="pd-profile-grid">
+                    <label className="pd-profile-label">Full name</label>
+                    <input type="text" name="full_name" value={profileForm.full_name} onChange={handleProfileChange} className="pd-profile-input" placeholder="Your name" />
+                    <label className="pd-profile-label">Email</label>
+                    <input type="email" name="email" value={profileForm.email} onChange={handleProfileChange} className="pd-profile-input" placeholder="email@example.com" />
+                    <label className="pd-profile-label">Phone</label>
+                    <input type="text" name="phone" value={profileForm.phone} onChange={handleProfileChange} className="pd-profile-input" placeholder="+92 300 1234567" />
+                    <label className="pd-profile-label">City</label>
+                    <select name="city_id" value={profileForm.city_id} onChange={handleProfileChange} className="pd-profile-input">
+                      <option value="">Select city</option>
+                      {cities.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.city_name}{c.city_name_urdu ? `  •  ${c.city_name_urdu}` : ''}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="pd-profile-label">Address</label>
+                    <input type="text" name="default_address" value={profileForm.default_address} onChange={handleProfileChange} className="pd-profile-input" placeholder="Area, address" />
+                    <label className="pd-profile-label">Bio</label>
+                    <textarea name="bio" value={profileForm.bio} onChange={handleProfileChange} className="pd-profile-input pd-profile-bio" placeholder="Short intro about you and your services" rows={3} />
+                  </div>
+                  <button type="button" className="pd-primary-btn" onClick={saveProfile} disabled={profileSaving}>
+                    {profileSaving ? 'Saving...' : 'Save profile'}
+                  </button>
+                </div>
+
+                <div className="pd-profile-card">
+                  <h3 className="pd-profile-card-title">My services & pricing</h3>
+                  <p className="pd-profile-card-sub">Add or remove services and set minimum charges and hourly rates.</p>
+                  <div className="pd-services-table">
+                    <div className="pd-services-table-header">
+                      <span>Service</span>
+                      <span>Min charges (Rs)</span>
+                      <span>Hourly rate (Rs)</span>
+                      <span></span>
+                    </div>
+                    {profileServices.map((s, i) => (
+                      <div key={s.service_id || i} className="pd-services-table-row">
+                        <span className="pd-services-name">{s.name || s.english_name}</span>
+                        <input type="number" min="0" step="50" value={s.minimum_charges} onChange={(e) => updateServicePrice(i, 'minimum_charges', e.target.value)} className="pd-services-input" />
+                        <input type="number" min="0" step="50" value={s.hourly_rate} onChange={(e) => updateServicePrice(i, 'hourly_rate', e.target.value)} className="pd-services-input" />
+                        <button type="button" className="pd-profile-remove-btn" onClick={() => removeService(i)}>Remove</button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pd-profile-add-service">
+                    <select onChange={addServiceById} className="pd-profile-input" style={{ maxWidth: 220 }}>
+                      <option value="">Add a service...</option>
+                      {servicesList.filter((s) => !profileServices.some((ps) => ps.service_id === s.id)).map((s) => (
+                        <option key={s.id} value={s.id}>{s.english_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button type="button" className="pd-primary-btn" onClick={saveServices} disabled={servicesSaving}>
+                    {servicesSaving ? 'Saving...' : 'Save services'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {activeTab !== 'dashboard' && activeTab !== 'profile' && (
           <div>
             <h2 className="pd-header-title">
               {navItems.find((i) => i.id === activeTab)?.label ||

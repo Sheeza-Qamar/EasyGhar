@@ -161,6 +161,68 @@
   background: #f0f9ff;
 }
 
+/* Custom City Dropdown — English left, Urdu right, no dot */
+.custom-city-wrap {
+  position: relative;
+  width: 100%;
+}
+.custom-city-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.custom-city-chevron {
+  font-size: 10px;
+  color: #64748b;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.custom-city-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0 0;
+  padding: 8px 0;
+  list-style: none;
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 50;
+}
+.custom-city-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+.custom-city-option:hover {
+  background: #f0f9ff;
+}
+.custom-city-english {
+  flex-shrink: 0;
+  text-align: left;
+  color: #1e293b;
+}
+.custom-city-urdu {
+  flex-shrink: 0;
+  text-align: right;
+  direction: rtl;
+  color: #475569;
+  font-weight: 500;
+}
+
 /* Service Dropdown */
 .service-dropdown {
   min-height: 320px;

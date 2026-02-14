@@ -31,6 +31,7 @@ const Navbar = () => {
 
   const logout = () => {
     localStorage.removeItem('easyghar_user');
+    localStorage.removeItem('easyghar_token');
     setUser(null);
     setMobileMenuOpen(false);
     navigate('/');
