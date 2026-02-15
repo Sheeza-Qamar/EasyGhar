@@ -61,7 +61,9 @@ const SignIn = () => {
           if (data.token) localStorage.setItem('easyghar_token', data.token);
         } catch (_) {}
         const isWorker = data.user.role === 'worker';
-        setTimeout(() => navigate(isWorker ? '/provider-dashboard' : '/'), 800);
+        const isCustomer = data.user.role === 'customer';
+        const next = isWorker ? '/provider-dashboard' : isCustomer ? '/services' : '/';
+        setTimeout(() => navigate(next), 800);
       } else {
         setTimeout(() => navigate('/'), 800);
       }

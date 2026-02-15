@@ -113,10 +113,10 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="hidden md:flex items-center gap-8 lg:gap-10">
-          <a href="#services" className="nav-link stagger-1">Services</a>
-          <a href="#how-it-works" className="nav-link stagger-2">How It Works</a>
-          <a href="#why-us" className="nav-link stagger-3">Why Us</a>
-          <a href="#testimonials" className="nav-link stagger-4">Reviews</a>
+          <Link to="/services" className="nav-link stagger-1">Browse Services</Link>
+          <a href="/#services" className="nav-link stagger-2">How It Works</a>
+          <a href="/#why-us" className="nav-link stagger-3">Why Us</a>
+          <a href="/#testimonials" className="nav-link stagger-4">Reviews</a>
         </div>
         <div className="flex items-center gap-4 lg:gap-5 stagger-5">
           {user ? (
@@ -160,10 +160,10 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white">
           <div className="px-4 py-4 space-y-3">
-            <a href="#services" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Services</a>
-            <a href="#how-it-works" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-            <a href="#why-us" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Why Us</a>
-            <a href="#testimonials" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
+            <Link to="/services" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Browse Services</Link>
+            <a href="/#how-it-works" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+            <a href="/#why-us" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Why Us</a>
+            <a href="/#testimonials" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
             <div className="pt-5 border-t border-slate-200 space-y-3">
               {user ? (
                 <>

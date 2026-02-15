@@ -7,6 +7,7 @@ import SignIn from './components/signin/SignIn';
 import ProviderSignup from './components/provider-signup/ProviderSignup';
 import ProviderDashboard from './components/provider-dashboard/ProviderDashboard';
 import AdminDashboard from './components/admin-dashboard/AdminDashboard';
+import CustomerServices from './components/customer-services/CustomerServices';
 import TermsOfService from './components/legal/TermsOfService';
 import PrivacyPolicy from './components/legal/PrivacyPolicy';
 import './App.css';
@@ -21,6 +22,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/provider-dashboard" element={<ProviderDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/services" element={<CustomerServices />} />
         <Route path="/join-as-provider" element={<ProviderSignup />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
