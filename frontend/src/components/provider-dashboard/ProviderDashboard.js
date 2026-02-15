@@ -293,14 +293,12 @@ const ProviderDashboard = () => {
 
       <main className="pd-main-content">
         <div className="pd-top-bar">
-          {activeTab === 'dashboard' ? (
-            <div className="pd-welcome-block">
-              <h2 className="pd-header-title pd-stagger-1">Welcome back, {firstName}</h2>
-              <p className="pd-header-subtitle pd-stagger-1">Here&apos;s your business overview for today</p>
-            </div>
-          ) : (
-            <div className="pd-top-bar-spacer" />
-          )}
+          <div className="pd-top-welcome">
+            <h2 className="pd-header-title">Welcome back, {firstName}</h2>
+            {activeTab === 'dashboard' && (
+              <p className="pd-header-subtitle">Here&apos;s your business overview for today</p>
+            )}
+          </div>
           <div className="pd-top-actions">
             <button type="button" className="pd-icon-btn" aria-label="Notifications">
               🔔
@@ -317,7 +315,7 @@ const ProviderDashboard = () => {
 
         {activeTab === 'dashboard' && (
           <>
-            <div className="pd-stats-grid">
+            <div className="pd-stats-grid" style={{ marginTop: 24 }}>
               <div className="pd-stat-card pd-stagger-2">
                 <div className="pd-stat-header">
                   <span className="pd-stat-title">Bookings This Month</span>

@@ -92,41 +92,7 @@ const SignIn = () => {
         </div>
       )}
 
-      <div className="customer-content-wrapper grid grid-cols-1 lg:grid-cols-2 min-h-screen" style={{ paddingTop: '72px' }}>
-        <div className="customer-left-section hidden lg:flex">
-          <div className="customer-left-content">
-            <svg className="customer-logo-svg w-12 h-12 mb-12 opacity-90" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="24" cy="24" r="22" fill="white" opacity="0.15" stroke="white" strokeWidth="1.5" />
-              <path d="M12 30L24 15L36 30" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              <rect x="15" y="30" width="18" height="12" rx="1.5" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-              <rect x="20" y="33" width="8" height="9" rx="0.5" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-              <circle cx="26.5" cy="38" r="1" fill="white" />
-              <rect x="15.5" y="33" width="3" height="3" rx="0.4" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-              <rect x="29.5" y="33" width="3" height="3" rx="0.4" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-            </svg>
-            <h2>Welcome back<br />to Easyghar</h2>
-            <p>
-              Sign in to book services, manage your bookings, and connect with verified home service professionals.
-            </p>
-            <div>
-              <div className="customer-benefit-item">
-                <div className="customer-benefit-icon">🎯</div>
-                <div className="customer-benefit-text">
-                  <div className="customer-benefit-title">Verified Professionals</div>
-                  All providers are thoroughly vetted and rated by real customers.
-                </div>
-              </div>
-              <div className="customer-benefit-item">
-                <div className="customer-benefit-icon">⚡</div>
-                <div className="customer-benefit-text">
-                  <div className="customer-benefit-title">Instant Booking</div>
-                  Reserve services in seconds with real-time availability.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div className="customer-content-wrapper customer-signin-centered min-h-screen" style={{ paddingTop: '72px' }}>
         <div className="customer-form-column">
           <div className="customer-form-column-inner">
             <div className="customer-form-card">

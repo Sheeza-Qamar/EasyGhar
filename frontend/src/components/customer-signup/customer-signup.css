@@ -143,6 +143,17 @@
   min-height: 100vh;
 }
 
+/* Sign-in page: no left panel, form centered */
+.customer-signin-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.customer-signin-centered .customer-form-column {
+  width: 100%;
+  max-width: 480px;
+}
+
 /* Left section - benefits */
 .customer-left-section {
   background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #10b981 100%);
