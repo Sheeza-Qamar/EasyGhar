@@ -25,7 +25,7 @@ const CustomerServices = () => {
   const [view, setView] = useState('browse'); // 'browse' | 'worker'
   const [selectedWorkerId, setSelectedWorkerId] = useState(null);
   const [search, setSearch] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [serviceTypeFilter, setServiceTypeFilter] = useState(''); // dropdown: '' = All
   const [sortBy, setSortBy] = useState('relevant');
 
   const filteredServices = useMemo(() => {
@@ -34,7 +34,7 @@ const CustomerServices = () => {
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.provider.toLowerCase().includes(search.toLowerCase()) ||
         s.location.toLowerCase().includes(search.toLowerCase());
-      const matchType = selectedTypes.length === 0 || selectedTypes.includes(s.type);
+      const matchType = !serviceTypeFilter || s.type === serviceTypeFilter;
       return matchSearch && matchType;
     });
     if (sortBy === 'rating') list = [...list].sort((a, b) => b.rating - a.rating);
@@ -42,7 +42,7 @@ const CustomerServices = () => {
     else if (sortBy === 'price-high') list = [...list].sort((a, b) => b.price - a.price);
     else if (sortBy === 'reviews') list = [...list].sort((a, b) => b.reviews - a.reviews);
     return list;
-  }, [search, selectedTypes, sortBy]);
+  }, [search, serviceTypeFilter, sortBy]);
 
   const selectedWorker = useMemo(() => {
     if (!selectedWorkerId) return null;
@@ -55,13 +55,9 @@ const CustomerServices = () => {
     return SERVICES_DATA.filter((s) => s.workerId === selectedWorkerId);
   }, [selectedWorkerId]);
 
-  const toggleType = (type) => {
-    setSelectedTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]));
-  };
-
   const resetFilters = () => {
     setSearch('');
-    setSelectedTypes([]);
+    setServiceTypeFilter('');
     setSortBy('relevant');
   };
 
@@ -87,50 +83,54 @@ const CustomerServices = () => {
       {view === 'browse' && (
         <div className="cs-browse">
           <div className="cs-container">
-            <aside className="cs-sidebar">
-              <div className="cs-filter-section">
-                <div className="cs-filter-title">🔍 Search</div>
+            <div className="cs-header-row">
+              <div className="cs-header-info">
+                <h1 className="cs-browse-title">Browse Services</h1>
+                <p className="cs-browse-subtitle">Find trusted services from verified professionals</p>
+              </div>
+            </div>
+
+            <div className="cs-top-filters">
+              <div className="cs-filter-dropdown-wrap">
+                <label className="cs-filter-label">Service type</label>
+                <select
+                  className="cs-filter-select"
+                  value={serviceTypeFilter}
+                  onChange={(e) => setServiceTypeFilter(e.target.value)}
+                >
+                  <option value="">All services</option>
+                  {SERVICE_TYPES.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="cs-filter-dropdown-wrap">
+                <label className="cs-filter-label">Sort by</label>
+                <select className="cs-filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                  <option value="relevant">Most Relevant</option>
+                  <option value="rating">Highest Rated</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="reviews">Most Reviewed</option>
+                </select>
+              </div>
+              <div className="cs-filter-search-wrap">
+                <label className="cs-filter-label">Search</label>
                 <input
                   type="text"
-                  className="cs-search-input"
-                  placeholder="Search services..."
+                  className="cs-filter-search-input"
+                  placeholder="Service or worker name..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <div className="cs-filter-section">
-                <div className="cs-filter-title">🔧 Service Type</div>
-                {SERVICE_TYPES.map((type) => (
-                  <label key={type} className="cs-filter-checkbox">
-                    <input type="checkbox" checked={selectedTypes.includes(type)} onChange={() => toggleType(type)} />
-                    <span>{type}</span>
-                  </label>
-                ))}
+              <div className="cs-filter-actions">
+                <span className="cs-result-count">Showing {filteredServices.length} services</span>
+                <button type="button" className="cs-reset-btn" onClick={resetFilters}>Reset</button>
               </div>
-              <div className="cs-filter-section">
-                <button type="button" className="cs-filter-btn" onClick={resetFilters}>Reset All</button>
-              </div>
-            </aside>
+            </div>
 
-            <div className="cs-content">
-              <div className="cs-header-row">
-                <div className="cs-header-info">
-                  <h1 className="cs-browse-title">Browse Services</h1>
-                  <p className="cs-browse-subtitle">Find trusted services from verified professionals</p>
-                </div>
-                <div className="cs-sort-row">
-                  <span className="cs-result-count">Showing {filteredServices.length} services</span>
-                  <select className="cs-sort-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                    <option value="relevant">Most Relevant</option>
-                    <option value="rating">Highest Rated</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="reviews">Most Reviewed</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="cs-services-grid">
+            <div className="cs-services-grid">
                 {filteredServices.length === 0 ? (
                   <div className="cs-no-results">
                     <div className="cs-no-results-icon">🔍</div>
@@ -171,7 +171,6 @@ const CustomerServices = () => {
                   ))
                 )}
               </div>
-            </div>
           </div>
         </div>
       )}

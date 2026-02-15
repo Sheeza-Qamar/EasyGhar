@@ -17,104 +17,98 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 20px 20px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 20px;
-}
-
-/* Sidebar – compact */
-.cs-sidebar {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  height: fit-content;
-  position: sticky;
-  top: 86px;
-  border: 1px solid #e2e8f0;
-}
-.cs-filter-section {
-  margin-bottom: 16px;
-}
-.cs-filter-section:last-child { margin-bottom: 0; }
-.cs-filter-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.cs-search-input {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 13px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.cs-search-input:focus {
-  outline: none;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
-}
-.cs-filter-checkbox {
   display: flex;
-  align-items: center;
-  margin-bottom: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  color: #475569;
+  flex-direction: column;
 }
-.cs-filter-checkbox input {
-  margin-right: 8px;
-  cursor: pointer;
-  accent-color: #ef4444;
-}
-.cs-filter-btn {
-  width: 100%;
-  padding: 8px;
-  background: #f1f5f9;
-  color: #64748b;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.cs-filter-btn:hover { background: #e2e8f0; }
 
-/* Content area – compact */
-.cs-content { display: flex; flex-direction: column; min-width: 0; }
+/* Top filters – single row with dropdowns */
 .cs-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  gap: 10px;
+  margin-bottom: 12px;
 }
 .cs-header-info { flex: 1; min-width: 0; }
 .cs-browse-title { font-size: 22px; font-weight: 800; color: #0f172a; margin: 0 0 2px 0; }
 .cs-browse-subtitle { font-size: 13px; color: #64748b; margin: 0; }
-.cs-sort-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.cs-result-count { font-size: 12px; color: #64748b; font-weight: 600; }
-.cs-sort-select {
+
+.cs-top-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+.cs-filter-dropdown-wrap,
+.cs-filter-search-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cs-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.cs-filter-select {
   padding: 8px 12px;
+  min-width: 140px;
   border: 1.5px solid #e2e8f0;
   border-radius: 6px;
   background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.cs-filter-select:hover,
+.cs-filter-select:focus {
+  outline: none;
+  border-color: #ef4444;
+}
+.cs-filter-search-input {
+  padding: 8px 12px;
+  min-width: 200px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #0f172a;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cs-filter-search-input::placeholder { color: #94a3b8; }
+.cs-filter-search-input:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+.cs-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+.cs-result-count { font-size: 12px; color: #64748b; font-weight: 600; }
+.cs-reset-btn {
+  padding: 8px 14px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #374151;
   cursor: pointer;
+  transition: background 0.2s;
 }
-.cs-sort-select:hover { border-color: #ef4444; }
+.cs-reset-btn:hover { background: #e2e8f0; color: #0f172a; }
 
-/* Services grid – compact */
+/* Services grid – 4 cards per row */
 .cs-services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 .cs-service-card {
@@ -370,19 +364,24 @@
 }
 .cs-book-service-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(239, 68, 68, 0.25); }
 
+@media (max-width: 1200px) {
+  .cs-services-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 1024px) {
-  .cs-container { grid-template-columns: 1fr; }
-  .cs-sidebar { position: relative; top: auto; }
+  .cs-services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-profile-header { grid-template-columns: 1fr; text-align: center; }
   .cs-profile-stats { justify-content: center; }
-  .cs-browse-title { font-size: 24px; }
+  .cs-browse-title { font-size: 20px; }
+  .cs-top-filters { flex-direction: column; align-items: stretch; }
+  .cs-filter-actions { margin-left: 0; }
 }
 
 @media (max-width: 640px) {
   .cs-services-grid { grid-template-columns: 1fr; }
   .cs-worker-services-grid { grid-template-columns: 1fr; }
-  .cs-header-row { flex-direction: column; align-items: flex-start; }
-  .cs-sort-select { width: 100%; }
+  .cs-filter-select,
+  .cs-filter-search-input { min-width: 100%; }
   .cs-profile-actions { flex-direction: row; }
   .cs-btn { flex: 1; }
 }
