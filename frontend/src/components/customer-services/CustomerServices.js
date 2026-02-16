@@ -1,35 +1,46 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '../navbar/Navbar';
 import './customer-services.css';
 
-// Static data for now – same structure as reference; will be replaced with real API later
-const SERVICES_DATA = [
-  { id: 1, name: 'Drain Cleaning & Repair', type: 'Plumbing', workerId: 1, provider: 'Ali Hassan', initials: 'AH', location: 'Lahore', price: 3500, rating: 4.9, reviews: 124, experience: '8 years', jobs: 234, icon: '🔧', bio: 'Expert in residential plumbing with 8+ years of experience. Specialized in drain cleaning, leak repairs, and pipe installation.', service: 'Plumbing Specialist' },
-  { id: 2, name: 'Electrical Wiring', type: 'Electrical', workerId: 2, provider: 'Usman Khan', initials: 'UK', location: 'Karachi', price: 2500, rating: 4.8, reviews: 89, experience: '15 years', jobs: 567, icon: '⚡', bio: 'Licensed electrician with 15 years in residential and commercial electrical work.', service: 'Electrical Expert' },
-  { id: 3, name: 'AC Installation', type: 'HVAC', workerId: 3, provider: 'Sara Ahmed', initials: 'SA', location: 'Islamabad', price: 4500, rating: 5.0, reviews: 212, experience: '12 years', jobs: 392, icon: '❄️', bio: 'HVAC specialist with 12 years of experience. Expert in AC installation, repair, and maintenance.', service: 'AC Specialist' },
-  { id: 4, name: 'Water Heater Installation', type: 'Plumbing', workerId: 1, provider: 'Ali Hassan', initials: 'AH', location: 'Lahore', price: 5500, rating: 4.9, reviews: 124, experience: '8 years', jobs: 234, icon: '💧', bio: 'Expert in residential plumbing with 8+ years of experience.', service: 'Plumbing Specialist' },
-  { id: 5, name: 'Interior Painting', type: 'Painting', workerId: 4, provider: 'Fatima Noor', initials: 'FN', location: 'Lahore', price: 2000, rating: 4.9, reviews: 228, experience: '9 years', jobs: 412, icon: '🎨', bio: 'Professional painter specializing in interior and exterior painting.', service: 'Painting Expert' },
-  { id: 6, name: 'Pipe Replacement', type: 'Plumbing', workerId: 1, provider: 'Ali Hassan', initials: 'AH', location: 'Lahore', price: 2800, rating: 4.9, reviews: 124, experience: '8 years', jobs: 234, icon: '🔧', bio: 'Expert in residential plumbing with 8+ years of experience.', service: 'Plumbing Specialist' },
-  { id: 7, name: 'Circuit Breaker Repair', type: 'Electrical', workerId: 2, provider: 'Usman Khan', initials: 'UK', location: 'Karachi', price: 1800, rating: 4.8, reviews: 89, experience: '15 years', jobs: 567, icon: '⚡', bio: 'Licensed electrician with 15 years in residential and commercial work.', service: 'Electrical Expert' },
-  { id: 8, name: 'Furnace Maintenance', type: 'HVAC', workerId: 5, provider: 'Imran Sheikh', initials: 'IS', location: 'Rawalpindi', price: 2200, rating: 4.7, reviews: 98, experience: '7 years', jobs: 189, icon: '❄️', bio: 'HVAC technician providing furnace maintenance and repair services.', service: 'HVAC Technician' },
-  { id: 9, name: 'Cabinet Installation', type: 'Carpentry', workerId: 6, provider: 'Zainab Malik', initials: 'ZM', location: 'Faisalabad', price: 4200, rating: 4.8, reviews: 176, experience: '14 years', jobs: 451, icon: '🪑', bio: 'Expert carpenter in kitchen and bathroom cabinet installation.', service: 'Carpentry Expert' },
-  { id: 10, name: 'Outlet Installation', type: 'Electrical', workerId: 7, provider: 'Hamza Ali', initials: 'HA', location: 'Lahore', price: 1200, rating: 4.9, reviews: 201, experience: '9 years', jobs: 512, icon: '⚡', bio: 'Electrician specializing in outlet installation and fixture upgrades.', service: 'Electrical Expert' },
-  { id: 11, name: 'Exterior Painting', type: 'Painting', workerId: 4, provider: 'Fatima Noor', initials: 'FN', location: 'Lahore', price: 3200, rating: 4.9, reviews: 228, experience: '9 years', jobs: 412, icon: '🎨', bio: 'Professional painter using premium materials.', service: 'Painting Expert' },
-  { id: 12, name: 'Tile Installation', type: 'Tiling', workerId: 6, provider: 'Zainab Malik', initials: 'ZM', location: 'Faisalabad', price: 3800, rating: 4.8, reviews: 176, experience: '14 years', jobs: 451, icon: '🧱', bio: 'Skilled in tile and flooring installation.', service: 'Carpentry Expert' },
-];
-
-const SERVICE_TYPES = ['Plumbing', 'Electrical', 'HVAC', 'Painting', 'Carpentry', 'Tiling'];
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const CustomerServices = () => {
   const [view, setView] = useState('browse'); // 'browse' | 'worker'
   const [selectedWorkerId, setSelectedWorkerId] = useState(null);
   const [search, setSearch] = useState('');
-  const [serviceTypeFilter, setServiceTypeFilter] = useState(''); // dropdown: '' = All
+  const [serviceTypeFilter, setServiceTypeFilter] = useState('');
   const [sortBy, setSortBy] = useState('relevant');
+  const [servicesData, setServicesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    setLoadError('');
+    fetch(`${API_BASE}/api/browse/services`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.services && Array.isArray(data.services)) {
+          setServicesData(data.services);
+        } else {
+          setServicesData([]);
+          setLoadError(data.message || 'Failed to load services.');
+        }
+      })
+      .catch(() => {
+        setServicesData([]);
+        setLoadError('Network error. Please try again.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const serviceTypes = useMemo(() => {
+    const types = [...new Set(servicesData.map((s) => s.type).filter(Boolean))].sort();
+    return types;
+  }, [servicesData]);
 
   const filteredServices = useMemo(() => {
-    let list = SERVICES_DATA.filter((s) => {
+    let list = servicesData.filter((s) => {
       const matchSearch = !search.trim() ||
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.provider.toLowerCase().includes(search.toLowerCase()) ||
@@ -42,18 +53,17 @@ const CustomerServices = () => {
     else if (sortBy === 'price-high') list = [...list].sort((a, b) => b.price - a.price);
     else if (sortBy === 'reviews') list = [...list].sort((a, b) => b.reviews - a.reviews);
     return list;
-  }, [search, serviceTypeFilter, sortBy]);
+  }, [servicesData, search, serviceTypeFilter, sortBy]);
 
   const selectedWorker = useMemo(() => {
     if (!selectedWorkerId) return null;
-    const first = SERVICES_DATA.find((s) => s.workerId === selectedWorkerId);
-    return first || null;
-  }, [selectedWorkerId]);
+    return servicesData.find((s) => s.workerId === selectedWorkerId) || null;
+  }, [selectedWorkerId, servicesData]);
 
   const workerServices = useMemo(() => {
     if (!selectedWorkerId) return [];
-    return SERVICES_DATA.filter((s) => s.workerId === selectedWorkerId);
-  }, [selectedWorkerId]);
+    return servicesData.filter((s) => s.workerId === selectedWorkerId);
+  }, [selectedWorkerId, servicesData]);
 
   const resetFilters = () => {
     setSearch('');
@@ -99,7 +109,7 @@ const CustomerServices = () => {
                   onChange={(e) => setServiceTypeFilter(e.target.value)}
                 >
                   <option value="">All services</option>
-                  {SERVICE_TYPES.map((type) => (
+                  {serviceTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
@@ -131,7 +141,19 @@ const CustomerServices = () => {
             </div>
 
             <div className="cs-services-grid">
-                {filteredServices.length === 0 ? (
+                {loading ? (
+                  <div className="cs-no-results">
+                    <div className="cs-no-results-icon">⏳</div>
+                    <h3 className="cs-no-results-title">Loading services...</h3>
+                    <p className="cs-no-results-text">Please wait</p>
+                  </div>
+                ) : loadError ? (
+                  <div className="cs-no-results">
+                    <div className="cs-no-results-icon">⚠️</div>
+                    <h3 className="cs-no-results-title">Could not load services</h3>
+                    <p className="cs-no-results-text">{loadError}</p>
+                  </div>
+                ) : filteredServices.length === 0 ? (
                   <div className="cs-no-results">
                     <div className="cs-no-results-icon">🔍</div>
                     <h3 className="cs-no-results-title">No services found</h3>
