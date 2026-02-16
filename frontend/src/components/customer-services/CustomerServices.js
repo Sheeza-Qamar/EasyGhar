@@ -93,13 +93,6 @@ const CustomerServices = () => {
       {view === 'browse' && (
         <div className="cs-browse">
           <div className="cs-container">
-            <div className="cs-header-row">
-              <div className="cs-header-info">
-                <h1 className="cs-browse-title">Browse Services</h1>
-                <p className="cs-browse-subtitle">Find trusted services from verified professionals</p>
-              </div>
-            </div>
-
             <div className="cs-top-filters">
               <div className="cs-filter-dropdown-wrap">
                 <label className="cs-filter-label">Service type</label>
