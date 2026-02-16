@@ -169,10 +169,6 @@
   color: #0ea5e9 !important;
 }
 
-.nav-link.active::after {
-  width: calc(100% - 24px);
-}
-
 /* Mobile Nav Links */
 .nav-link-mobile {
   color: #000000 !important;
