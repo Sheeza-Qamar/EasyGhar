@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './navbar.css';
 
 const Navbar = () => {
+  const { pathname, hash } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(() => {
     try {
@@ -113,16 +114,16 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="hidden md:flex items-center gap-8 lg:gap-10">
-          <Link to="/services" className="nav-link stagger-1">Browse Services</Link>
-          <a href="/#services" className="nav-link stagger-2">How It Works</a>
-          <a href="/#why-us" className="nav-link stagger-3">Why Us</a>
-          <a href="/#testimonials" className="nav-link stagger-4">Reviews</a>
+          <Link to="/services" className={`nav-link stagger-1 ${pathname === '/services' ? 'active' : ''}`}>Browse Services</Link>
+          <a href="/#services" className={`nav-link stagger-2 ${pathname === '/' && (hash === '#services' || hash === '#how-it-works') ? 'active' : ''}`}>How It Works</a>
+          <a href="/#why-us" className={`nav-link stagger-3 ${pathname === '/' && hash === '#why-us' ? 'active' : ''}`}>Why Us</a>
+          <a href="/#testimonials" className={`nav-link stagger-4 ${pathname === '/' && hash === '#testimonials' ? 'active' : ''}`}>Reviews</a>
         </div>
         <div className="flex items-center gap-4 lg:gap-5 stagger-5">
           {user ? (
             <>
               {user.role === 'worker' && (
-                <Link to="/provider-dashboard" className="btn btn-primary hidden sm:inline-flex">
+                <Link to="/provider-dashboard" className={`btn hidden sm:inline-flex ${pathname === '/provider-dashboard' ? 'btn-primary-active' : 'btn-primary'}`}>
                   Dashboard
                 </Link>
               )}
@@ -160,15 +161,15 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white">
           <div className="px-4 py-4 space-y-3">
-            <Link to="/services" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Browse Services</Link>
-            <a href="/#how-it-works" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-            <a href="/#why-us" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Why Us</a>
-            <a href="/#testimonials" className="block nav-link-mobile" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
+            <Link to="/services" className={`block nav-link-mobile ${pathname === '/services' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Browse Services</Link>
+            <a href="/#how-it-works" className={`block nav-link-mobile ${pathname === '/' && (hash === '#services' || hash === '#how-it-works') ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+            <a href="/#why-us" className={`block nav-link-mobile ${pathname === '/' && hash === '#why-us' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Why Us</a>
+            <a href="/#testimonials" className={`block nav-link-mobile ${pathname === '/' && hash === '#testimonials' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Reviews</a>
             <div className="pt-5 border-t border-slate-200 space-y-3">
               {user ? (
                 <>
                   {user.role === 'worker' && (
-                    <Link to="/provider-dashboard" className="btn btn-primary w-full block text-center" onClick={() => setMobileMenuOpen(false)}>
+                    <Link to="/provider-dashboard" className={`btn w-full block text-center ${pathname === '/provider-dashboard' ? 'btn-primary-active' : 'btn-primary'}`} onClick={() => setMobileMenuOpen(false)}>
                       Dashboard
                     </Link>
                   )}
