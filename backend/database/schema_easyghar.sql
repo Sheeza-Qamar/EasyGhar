@@ -153,6 +153,8 @@ CREATE TABLE IF NOT EXISTS workers (
     bio TEXT,
     profile_photo_url VARCHAR(500),
     profile_photo_public_id VARCHAR(255),
+    banner_photo_url VARCHAR(500),
+    banner_photo_public_id VARCHAR(255),
     cnic_number VARCHAR(20) UNIQUE,
     verification_status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     verification_notes TEXT,

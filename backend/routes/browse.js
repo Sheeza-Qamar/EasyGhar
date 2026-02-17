@@ -18,6 +18,7 @@ router.get('/services', async (req, res) => {
         w.bio,
         w.experience_years AS worker_experience_years,
         w.profile_photo_url,
+        w.banner_photo_url,
         w.total_jobs_completed AS jobs,
         w.total_reviews AS reviews,
         COALESCE(w.average_rating, 0) AS rating,
@@ -65,6 +66,7 @@ router.get('/services', async (req, res) => {
         bio: r.bio || '',
         service: r.service_name || '',
         profile_photo_url: r.profile_photo_url || null,
+        banner_photo_url: r.banner_photo_url || null,
       };
     });
 

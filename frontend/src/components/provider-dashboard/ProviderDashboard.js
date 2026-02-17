@@ -20,6 +20,8 @@ const ProviderDashboard = () => {
   const [profileForm, setProfileForm] = useState({ full_name: '', email: '', phone: '', city_id: '', default_address: '', bio: '' });
   const [profilePhotoFile, setProfilePhotoFile] = useState(null);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
+  const [bannerPhotoFile, setBannerPhotoFile] = useState(null);
+  const [bannerPhotoPreview, setBannerPhotoPreview] = useState(null);
 
   const getToken = () => localStorage.getItem('easyghar_token') || '';
 
@@ -70,6 +72,7 @@ const ProviderDashboard = () => {
             bio: profileData.profile.bio || '',
           });
           setProfilePhotoPreview(profileData.profile.profile_photo_url || null);
+          setBannerPhotoPreview(profileData.profile.banner_photo_url || null);
           setProfileServices(profileData.services || []);
         } else {
           setProfileError(profileData.message || 'Failed to load profile.');
@@ -101,6 +104,14 @@ const ProviderDashboard = () => {
     }
   };
 
+  const handleBannerPhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setBannerPhotoFile(file);
+      setBannerPhotoPreview(URL.createObjectURL(file));
+    }
+  };
+
   const saveProfile = async () => {
     const token = getToken();
     if (!token) return;
@@ -114,6 +125,7 @@ const ProviderDashboard = () => {
       form.append('default_address', profileForm.default_address);
       form.append('bio', profileForm.bio);
       if (profilePhotoFile) form.append('profilePicture', profilePhotoFile);
+      if (bannerPhotoFile) form.append('bannerPicture', bannerPhotoFile);
       const res = await fetch(`${API_BASE}/api/worker/profile`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
@@ -126,6 +138,7 @@ const ProviderDashboard = () => {
       }
       setProfileError('');
       setProfilePhotoFile(null);
+      setBannerPhotoFile(null);
       if (user) {
         const updated = { ...user, full_name: profileForm.full_name, email: profileForm.email, phone: profileForm.phone };
         localStorage.setItem('easyghar_user', JSON.stringify(updated));
@@ -450,6 +463,20 @@ const ProviderDashboard = () => {
                     <div>
                       <label className="pd-profile-label">Profile photo</label>
                       <input type="file" accept="image/*" onChange={handleProfilePhotoChange} className="pd-profile-file" />
+                    </div>
+                  </div>
+                  <div className="pd-banner-photo-row">
+                    <div className="pd-banner-preview-wrap">
+                      {bannerPhotoPreview ? (
+                        <img src={bannerPhotoPreview} alt="Banner" className="pd-banner-preview" />
+                      ) : (
+                        <div className="pd-banner-placeholder">Banner / shop image</div>
+                      )}
+                    </div>
+                    <div>
+                      <label className="pd-profile-label">Banner image (shop/service)</label>
+                      <p className="pd-profile-hint">Shows on your service card in Browse Services. Grey area if not set.</p>
+                      <input type="file" accept="image/*" onChange={handleBannerPhotoChange} className="pd-profile-file" />
                     </div>
                   </div>
                   <div className="pd-profile-grid">

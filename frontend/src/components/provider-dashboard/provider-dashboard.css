@@ -540,6 +540,11 @@
   font-weight: 700;
 }
 .pd-profile-file { font-size: 13px; color: #64748b; margin-top: 4px; }
+.pd-banner-photo-row { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+.pd-banner-preview-wrap { flex-shrink: 0; width: 160px; height: 72px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; background: #e2e8f0; }
+.pd-banner-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-banner-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #94a3b8; text-align: center; padding: 0 8px; }
+.pd-profile-hint { font-size: 11px; color: #94a3b8; margin: 2px 0 0 0; }
 .pd-profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

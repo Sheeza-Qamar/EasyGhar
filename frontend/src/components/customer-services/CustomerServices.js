@@ -155,23 +155,39 @@ const CustomerServices = () => {
                 ) : (
                   filteredServices.map((service) => (
                     <div key={service.id} className="cs-service-card">
-                      <div className="cs-service-image">
-                        <span className="cs-service-emoji">{service.icon}</span>
+                      <div
+                        className="cs-service-banner"
+                        style={service.banner_photo_url ? {
+                          backgroundImage: `url("${service.banner_photo_url}")`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                        } : {}}
+                      >
+                        <button type="button" className="cs-banner-avatar" onClick={() => showWorkerProfile(service.workerId)} aria-label={service.provider}>
+                          {service.profile_photo_url ? (
+                            <img src={service.profile_photo_url} alt="" className="cs-banner-avatar-img" />
+                          ) : (
+                            <span className="cs-banner-avatar-initials">{service.initials}</span>
+                          )}
+                        </button>
                         <div className="cs-rating-badge">
                           <span className="cs-stars">⭐</span>
                           <span>{service.rating}</span>
                         </div>
                       </div>
                       <div className="cs-service-content">
+                        <div className="cs-service-icon-name">
+                          <span className="cs-service-emoji">{service.icon}</span>
+                          <h4 className="cs-service-name">{service.name}</h4>
+                        </div>
                         <button type="button" className="cs-provider-header" onClick={() => showWorkerProfile(service.workerId)}>
-                          <div className="cs-provider-avatar">{service.initials}</div>
                           <div className="cs-provider-info">
                             <h3 className="cs-provider-name">{service.provider}</h3>
                             <p>📍 {service.location}</p>
                           </div>
                         </button>
                         <span className="cs-service-type">{service.type}</span>
-                        <h4 className="cs-service-name">{service.name}</h4>
                         <p className="cs-service-desc">Professional {service.type.toLowerCase()} service with {service.experience} of experience.</p>
                         <div className="cs-service-meta">
                           <span>📊 <strong>{service.jobs}</strong> jobs</span>

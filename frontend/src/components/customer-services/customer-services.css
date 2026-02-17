@@ -124,17 +124,47 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   border-color: #ef4444;
 }
-.cs-service-image {
+/* Banner: shop/banner image or grey placeholder; worker profile pic overlayed */
+.cs-service-banner {
   width: 100%;
-  height: 120px;
-  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  height: 100px;
+  background-color: #e2e8f0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+.cs-banner-avatar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  line-height: 0;
 }
-.cs-service-emoji { font-size: 36px; }
-.cs-rating-badge {
+.cs-banner-avatar:hover { opacity: 0.95; }
+.cs-banner-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cs-banner-avatar-initials {
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}
+.cs-service-banner .cs-rating-badge {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -150,6 +180,15 @@
 }
 .cs-stars { color: #fbbf24; }
 .cs-service-content { padding: 14px; }
+/* Service icon + name in one row */
+.cs-service-icon-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cs-service-icon-name .cs-service-emoji { font-size: 22px; }
+.cs-service-icon-name .cs-service-name { margin: 0; font-size: 14px; font-weight: 700; color: #0f172a; }
 .cs-provider-header {
   display: flex;
   align-items: center;
@@ -163,19 +202,6 @@
   padding: 0;
 }
 .cs-provider-header:hover .cs-provider-name { color: #ef4444; }
-.cs-provider-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-  flex-shrink: 0;
-}
 .cs-provider-info { flex: 1; min-width: 0; }
 .cs-provider-name { font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 1px 0; transition: color 0.2s; }
 .cs-provider-info p { font-size: 11px; color: #64748b; margin: 0; }
