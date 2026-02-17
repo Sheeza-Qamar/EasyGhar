@@ -263,39 +263,40 @@ const ProviderDashboard = () => {
             </div>
           </Link>
         </div>
-        <div className="pd-nav-section">
-          <div className="pd-nav-section-title">Menu</div>
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`pd-nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(item.id)}
-            >
-              <span className="pd-nav-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+        <div className="pd-sidebar-nav">
+          <div className="pd-nav-section">
+            <div className="pd-nav-section-title">Menu</div>
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`pd-nav-item ${activeTab === item.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(item.id)}
+              >
+                <span className="pd-nav-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+          <div className="pd-nav-section">
+            <div className="pd-nav-section-title">Support</div>
+            {supportItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`pd-nav-item ${activeTab === item.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(item.id)}
+              >
+                <span className="pd-nav-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="pd-nav-section">
-          <div className="pd-nav-section-title">Support</div>
-          {supportItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`pd-nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(item.id)}
-            >
-              <span className="pd-nav-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </div>
-        <div style={{ padding: '28px 12px', borderTop: '1px solid rgba(226, 232, 240, 0.1)' }}>
+        <div className="pd-sidebar-footer">
           <button
             type="button"
-            className="pd-nav-item"
-            style={{ width: '100%', marginBottom: 0 }}
+            className="pd-nav-item pd-nav-item-logout"
             onClick={() => setLogoutModalOpen(true)}
           >
             <span className="pd-nav-icon">🚪</span>
