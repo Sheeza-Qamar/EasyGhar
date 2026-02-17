@@ -59,7 +59,7 @@ const LandingPage = () => {
                 Connect with verified, background-checked professionals. Transparent pricing, real-time tracking, and guaranteed satisfaction for all your household needs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 stagger-4">
-                <Link to="/get-started" className="btn btn-primary">
+                <Link to="/services" className="btn btn-primary">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg> Book Service Now
